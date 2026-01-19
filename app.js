@@ -1,130 +1,95 @@
-document.addEventListener("DOMContentLoaded", () => {
+const list = document.getElementById('productList');
+const modal = document.getElementById('modal');
+const addBtn = document.getElementById('addBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+const saveBtn = document.getElementById('saveBtn');
+const searchInput = document.getElementById('searchInput');
 
-  // ===== ELEMENTOS =====
-  const productList = document.getElementById("productList");
-  const addBtn = document.getElementById("addBtn");
-  const modal = document.getElementById("modal");
-  const cancelBtn = document.getElementById("cancelBtn");
-  const saveBtn = document.getElementById("saveBtn");
+let editIndex = null;
 
-  const nameInput = document.getElementById("nameInput");
-  const brandInput = document.getElementById("brandInput");
-  const sizeInput = document.getElementById("sizeInput");
-  const buyPriceInput = document.getElementById("buyPriceInput");
-  const sellPriceInput = document.getElementById("sellPriceInput");
-  const detailInput = document.getElementById("detailInput");
-  const searchInput = document.getElementById("searchInput");
+function openModal() {
+  modal.classList.remove('hidden');
+}
 
-  // ===== ESTADO =====
-  let products = JSON.parse(localStorage.getItem("products")) || [];
-  let editingIndex = null;
+function closeModal() {
+  modal.classList.add('hidden');
+  document.querySelectorAll('.modal-content input, textarea')
+    .forEach(e => e.value = '');
+  editIndex = null;
+}
 
-  // ===== FUNCIONES =====
-  function renderProducts(list = products) {
-    productList.innerHTML = "";
+addBtn.onclick = openModal;
+cancelBtn.onclick = closeModal;
 
-    if (list.length === 0) {
-      productList.innerHTML = "<p>No hay productos</p>";
-      return;
-    }
-
-    list.forEach((p, index) => {
-      const div = document.createElement("div");
-      div.className = "product-card";
-
-      div.innerHTML = `
-        <strong>${p.name}</strong><br>
-        Marca: ${p.brand}<br>
-        Tallas: ${p.size}<br>
-        Compra: S/ ${p.buyPrice} | Venta: S/ ${p.sellPrice}<br>
-        <small>Modificado: ${p.updatedAt}</small><br><br>
-        <button onclick="editProduct(${index})">Editar</button>
-        <button onclick="deleteProduct(${index})">Eliminar</button>
-      `;
-
-      productList.appendChild(div);
-    });
-  }
-
-  function openModal() {
-    modal.classList.remove("hidden");
-  }
-
-  function closeModal() {
-    modal.classList.add("hidden");
-    clearForm();
-    editingIndex = null;
-  }
-
-  function clearForm() {
-    nameInput.value = "";
-    brandInput.value = "";
-    sizeInput.value = "";
-    buyPriceInput.value = "";
-    sellPriceInput.value = "";
-    detailInput.value = "";
-  }
-
-  function saveProduct() {
-    if (!nameInput.value || !buyPriceInput.value || !sellPriceInput.value) {
-      alert("Completa los campos obligatorios");
-      return;
-    }
-
-    const product = {
-      name: nameInput.value.trim(),
-      brand: brandInput.value.trim(),
-      size: sizeInput.value.trim(),
-      buyPrice: buyPriceInput.value,
-      sellPrice: sellPriceInput.value,
-      detail: detailInput.value.trim(),
-      updatedAt: new Date().toLocaleString()
-    };
-
-    if (editingIndex !== null) {
-      products[editingIndex] = product;
-    } else {
-      products.push(product);
-    }
-
-    localStorage.setItem("products", JSON.stringify(products));
-    renderProducts();
-    closeModal();
-  }
-
-  // ===== GLOBALES =====
-  window.editProduct = (index) => {
-    const p = products[index];
-    nameInput.value = p.name;
-    brandInput.value = p.brand;
-    sizeInput.value = p.size;
-    buyPriceInput.value = p.buyPrice;
-    sellPriceInput.value = p.sellPrice;
-    detailInput.value = p.detail;
-    editingIndex = index;
-    openModal();
+saveBtn.onclick = () => {
+  const product = {
+    name: name.value,
+    brand: brand.value,
+    size: size.value,
+    buy: buyPrice.value,
+    sell: sellPrice.value,
+    detail: detail.value,
+    date: new Date().toLocaleDateString()
   };
 
-  window.deleteProduct = (index) => {
-    if (!confirm("¿Eliminar producto?")) return;
-    products.splice(index, 1);
-    localStorage.setItem("products", JSON.stringify(products));
-    renderProducts();
-  };
+  const products = getProducts();
 
-  // ===== EVENTOS =====
-  addBtn.addEventListener("click", openModal);
-  cancelBtn.addEventListener("click", closeModal);
-  saveBtn.addEventListener("click", saveProduct);
+  if (editIndex !== null) {
+    products[editIndex] = product;
+  } else {
+    products.push(product);
+  }
 
-  searchInput.addEventListener("input", () => {
-    const text = searchInput.value.toLowerCase();
-    const filtered = products.filter(p =>
-      p.name.toLowerCase().includes(text) ||
-      p.brand.toLowerCase().includes(text)
-    );
-    renderProducts(filtered);
+  saveProducts(products);
+  render(products);
+  closeModal();
+};
+
+function render(products) {
+  list.innerHTML = '';
+  products.forEach((p, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <strong>${p.name}</strong><br>
+      ${p.brand} | ${p.size}<br>
+      Compra: ${p.buy} | Venta: ${p.sell}<br>
+      <small>${p.detail}</small><br>
+      <small>${p.date}</small>
+      <div class="actions">
+        <button onclick="edit(${i})">Editar</button>
+        <button onclick="del(${i})">Eliminar</button>
+      </div>
+    `;
+    list.appendChild(li);
   });
+}
 
-  renderProducts();
-});
+function edit(i) {
+  const p = getProducts()[i];
+  name.value = p.name;
+  brand.value = p.brand;
+  size.value = p.size;
+  buyPrice.value = p.buy;
+  sellPrice.value = p.sell;
+  detail.value = p.detail;
+  editIndex = i;
+  openModal();
+}
+
+function del(i) {
+  const products = getProducts();
+  products.splice(i, 1);
+  saveProducts(products);
+  render(products);
+}
+
+searchInput.oninput = () => {
+  const text = searchInput.value.toLowerCase();
+  const products = getProducts().filter(p =>
+    p.name.toLowerCase().includes(text)
+  );
+  render(products);
+};
+
+render(getProducts());
+
