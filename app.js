@@ -5,6 +5,14 @@ const cancelBtn = document.getElementById('cancelBtn');
 const saveBtn = document.getElementById('saveBtn');
 const searchInput = document.getElementById('searchInput');
 
+// CAMPOS (ESTO ES LO QUE FALTABA)
+const productName = document.getElementById('productName');
+const brand = document.getElementById('brand');
+const size = document.getElementById('size');
+const buyPrice = document.getElementById('buyPrice');
+const sellPrice = document.getElementById('sellPrice');
+const detail = document.getElementById('detail');
+
 let editIndex = null;
 
 function openModal() {
@@ -13,17 +21,23 @@ function openModal() {
 
 function closeModal() {
   modal.classList.add('hidden');
-  document.querySelectorAll('.modal-content input, textarea')
-    .forEach(e => e.value = '');
+  productName.value = '';
+  brand.value = '';
+  size.value = '';
+  buyPrice.value = '';
+  sellPrice.value = '';
+  detail.value = '';
   editIndex = null;
 }
 
-addBtn.onclick = openModal;
-cancelBtn.onclick = closeModal;
+addBtn.addEventListener('click', openModal);
+cancelBtn.addEventListener('click', closeModal);
 
-saveBtn.onclick = () => {
+saveBtn.addEventListener('click', () => {
+  if (!productName.value.trim()) return;
+
   const product = {
-    name: name.value,
+    name: productName.value,
     brand: brand.value,
     size: size.value,
     buy: buyPrice.value,
@@ -43,7 +57,7 @@ saveBtn.onclick = () => {
   saveProducts(products);
   render(products);
   closeModal();
-};
+});
 
 function render(products) {
   list.innerHTML = '';
@@ -55,7 +69,7 @@ function render(products) {
       Compra: ${p.buy} | Venta: ${p.sell}<br>
       <small>${p.detail}</small><br>
       <small>${p.date}</small>
-      <div class="actions">
+      <div>
         <button onclick="edit(${i})">Editar</button>
         <button onclick="del(${i})">Eliminar</button>
       </div>
@@ -64,9 +78,9 @@ function render(products) {
   });
 }
 
-function edit(i) {
+window.edit = function (i) {
   const p = getProducts()[i];
-  name.value = p.name;
+  productName.value = p.name;
   brand.value = p.brand;
   size.value = p.size;
   buyPrice.value = p.buy;
@@ -74,22 +88,23 @@ function edit(i) {
   detail.value = p.detail;
   editIndex = i;
   openModal();
-}
+};
 
-function del(i) {
+window.del = function (i) {
   const products = getProducts();
   products.splice(i, 1);
   saveProducts(products);
   render(products);
-}
-
-searchInput.oninput = () => {
-  const text = searchInput.value.toLowerCase();
-  const products = getProducts().filter(p =>
-    p.name.toLowerCase().includes(text)
-  );
-  render(products);
 };
 
+searchInput.addEventListener('input', () => {
+  const text = searchInput.value.toLowerCase();
+  const filtered = getProducts().filter(p =>
+    p.name.toLowerCase().includes(text)
+  );
+  render(filtered);
+});
+
+closeModal();
 render(getProducts());
 
