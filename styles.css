@@ -1,0 +1,131 @@
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* ===== GENERAL ===== */
+body {
+  background: #f4f4f4;
+  padding: 16px;
+}
+
+/* ===== HEADER ===== */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+header h1 {
+  font-size: 22px;
+}
+
+header input {
+  padding: 10px;
+  font-size: 16px;
+  width: 180px;
+}
+
+/* ===== PRODUCTOS ===== */
+#productList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-card {
+  background: white;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+/* ===== BOTÓN + ===== */
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #007aff;
+  color: white;
+  border: none;
+  font-size: 28px;
+}
+
+/* ===== MODAL ===== */
+#modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#modal.hidden {
+  display: none;
+}
+
+#modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#modal-content input {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ========================= */
+/* ===== MOBILE (iPHONE) ==== */
+/* ========================= */
+
+@media (max-width: 600px) {
+
+  body {
+    font-size: 16px;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  header input {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .product-card {
+    padding: 14px;
+  }
+
+  .fab {
+    width: 60px;
+    height: 60px;
+    font-size: 32px;
+  }
+
+  #modal-content {
+    width: 90%;
+    max-width: none;
+  }
+}

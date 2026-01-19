@@ -1,0 +1,16 @@
+{
+  "name": "Inventario Personal",
+  "short_name": "Inventario",
+  "description": "Control personal de productos y precios",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#222222",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/679/679720.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

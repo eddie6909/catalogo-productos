@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario Personal</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header>
+    <h1>Inventario</h1>
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Buscar producto..."
+    >
+  </header>
+
+  <main id="productList"></main>
+
+  <!-- BOTÓN + -->
+  <button class="fab" id="addBtn">+</button>
+
+  <!-- MODAL -->
+  <div id="modal" class="hidden">
+    <div id="modal-content">
+
+      <h2>Producto</h2>
+
+      <!-- NUEVOS CAMPOS -->
+      <input type="text" id="nameInput" placeholder="Nombre del producto">
+      <input type="text" id="brandInput" placeholder="Marca">
+      <input type="text" id="sizeInput" placeholder="Tallas (Ej: S, M, L)">
+      <input type="number" id="buyPriceInput" placeholder="Precio de compra">
+      <input type="number" id="sellPriceInput" placeholder="Precio de venta">
+      <textarea id="detailInput" placeholder="Detalle del producto"></textarea>
+
+      <div class="modal-actions">
+        <button id="cancelBtn">Cancelar</button>
+        <button id="saveBtn">Guardar</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
