@@ -1,8 +1,10 @@
+const DB_KEY = 'products_db';
+
 function getProducts() {
-  const data = localStorage.getItem("products");
-  return data ? JSON.parse(data) : [];
+  return JSON.parse(localStorage.getItem(DB_KEY)) || [];
 }
 
 function saveProducts(products) {
-  localStorage.setItem("products", JSON.stringify(products));
+  localStorage.setItem(DB_KEY, JSON.stringify(products));
 }
+
