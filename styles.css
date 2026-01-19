@@ -12,11 +12,6 @@ header {
   color: white;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 18px;
-}
-
 #searchInput {
   flex: 1;
   padding: 6px;
@@ -24,7 +19,6 @@ header h1 {
 
 #addBtn {
   font-size: 22px;
-  padding: 0 12px;
 }
 
 main {
@@ -33,21 +27,14 @@ main {
 
 li {
   background: white;
-  margin-bottom: 8px;
   padding: 10px;
+  margin-bottom: 8px;
   border-radius: 6px;
-}
-
-.actions button {
-  margin-right: 5px;
 }
 
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0,0,0,.5);
   display: flex;
   justify-content: center;
@@ -55,7 +42,7 @@ li {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .modal-content {
